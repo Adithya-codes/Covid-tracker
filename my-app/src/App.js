@@ -10,7 +10,7 @@ import Select from "@material-ui/core/Select";
 import "../src/App.css";
 import Table from "./Components/Table/index";
 import Graph from "../src/Components/Graph/index";
-import CountUp from 'react-countup'
+import CountUp from "react-countup";
 
 const App = () => {
   const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const App = () => {
   const [countryList, setCountryList] = useState([]);
   const [country, setCountry] = useState("Worldwide");
   const [value, setValue] = useState(0);
-const[casesData,setCasesData] =useState(null)
+  const [casesData, setCasesData] = useState(null);
 
   let recovered;
   const [recoveredData, setRecoveredData] = useState(null);
@@ -43,11 +43,11 @@ const[casesData,setCasesData] =useState(null)
 
   const [deathsData, setDeathsData] = useState(null);
 
-
   const [countryTodayCasesData, setcountryTodayCasesData] = useState(null);
-  const [countryTodayRecoveryData, setCountryTodayRecoveryData] = useState(null);
+  const [countryTodayRecoveryData, setCountryTodayRecoveryData] = useState(
+    null
+  );
   const [countryTodayDeathData, setCountryTodayDeathData] = useState(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,9 +57,6 @@ const[casesData,setCasesData] =useState(null)
       const data = await res.json();
 
       setAllData(data);
-
-
-
 
       //countryList
 
@@ -77,9 +74,9 @@ const[casesData,setCasesData] =useState(null)
       setCountryList(countryArr);
       setAllData(data);
 
-      setNewCasesData(data.todayCases)
-      setGlobalTodayRecoveryData(data.todayRecovered)
-      setGlobalTodayDeathData(data.todayDeaths)
+      setNewCasesData(data.todayCases);
+      setGlobalTodayRecoveryData(data.todayRecovered);
+      setGlobalTodayDeathData(data.todayDeaths);
     };
 
     fetchData();
@@ -117,24 +114,17 @@ const[casesData,setCasesData] =useState(null)
 
       setRecoveredData(countryRecoveredCount);
       setDeathsData(countryDeathscount);
-      setCasesData(data.cases)
+      setCasesData(data.cases);
 
-
-      setcountryTodayCasesData(data.todayCases)
-      setCountryTodayRecoveryData(data.todayRecovered)
-      setCountryTodayDeathData(data.todayDeaths)
+      setcountryTodayCasesData(data.todayCases);
+      setCountryTodayRecoveryData(data.todayRecovered);
+      setCountryTodayDeathData(data.todayDeaths);
 
       inputVal === "Worldwide" ? setValue(0) : setValue(1);
     };
 
     fetchCountryData();
   };
-
-
-
-
-
-
 
   let cases = allData?.cases.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   let worldRecoveredData = allData?.recovered
@@ -144,17 +134,21 @@ const[casesData,setCasesData] =useState(null)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+  let countryRecoveredData = recoveredData
+    ?.toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  let countryDeathsData = deathsData
+    ?.toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  let countryCasesData = casesData
+    ?.toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-
-  let countryRecoveredData = recoveredData?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  let countryDeathsData = deathsData?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  let countryCasesData = casesData?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-
-  console.log(countryTodayCasesData,countryTodayRecoveryData,countryTodayDeathData);
-
-
-
+  console.log(
+    countryTodayCasesData,
+    countryTodayRecoveryData,
+    countryTodayDeathData
+  );
 
   return (
     <div className="app">
@@ -162,8 +156,6 @@ const[casesData,setCasesData] =useState(null)
         <Table />
       </div>
       <div className="graph-container">
-
-      
         <Graph
           recovered={recoveredData}
           death={deathsData}
@@ -195,13 +187,21 @@ const[casesData,setCasesData] =useState(null)
 
         <div className="card-content">
           <div className="card3">
-            <Card title="Cases" count={value === 0 ? cases : countryCasesData} todayGlobalData={value===0?newCasesData:countryTodayCasesData} />
+            <Card
+              title="Cases"
+              count={value === 0 ? cases : countryCasesData}
+              todayGlobalData={
+                value === 0 ? newCasesData : countryTodayCasesData
+              }
+            />
           </div>
           <div className="card2">
             <Card
               title="Recovered"
               count={value === 0 ? worldRecoveredData : countryRecoveredData}
-              todayGlobalData={value===0?globalTodayRecoveryData:countryTodayRecoveryData}
+              todayGlobalData={
+                value === 0 ? globalTodayRecoveryData : countryTodayRecoveryData
+              }
             />
           </div>
 
@@ -209,7 +209,9 @@ const[casesData,setCasesData] =useState(null)
             <Card
               title="Deaths"
               count={value === 0 ? worldDeathsData : countryDeathsData}
-              todayGlobalData={value===0?globalTodayDeathData:countryTodayDeathData}
+              todayGlobalData={
+                value === 0 ? globalTodayDeathData : countryTodayDeathData
+              }
             />
           </div>
         </div>
