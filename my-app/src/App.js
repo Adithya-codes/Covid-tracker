@@ -10,6 +10,7 @@ import Select from "@material-ui/core/Select";
 import "../src/App.css";
 import Table from "./Components/Table/index";
 import Graph from "../src/Components/Graph/index";
+import Linegraph from "../src/Components/Graph/linegraph";
 import CountUp from "react-countup";
 
 const App = () => {
@@ -84,10 +85,6 @@ const App = () => {
 
   recovered = allData?.recovered;
 
-  console.log(newCasesData);
-  console.log(globalTodayRecoveryData);
-  console.log(globalTodayDeathData);
-
   const handleChange = async (e) => {
     const inputVal = await e.target.value;
 
@@ -144,82 +141,92 @@ const App = () => {
     ?.toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  console.log(
-    countryTodayCasesData,
-    countryTodayRecoveryData,
-    countryTodayDeathData
-  );
-
   return (
-    <div className="app">
-      <div className="table">
-        <Table />
-      </div>
-      <div className="graph-container">
-        <Graph
-          recovered={recoveredData}
-          death={deathsData}
-          worldCasesData={allData?.cases}
-          worldRecoveredData={allData?.recovered}
-          worldDeathsData={allData?.deaths}
-          input={country}
-        />
-      </div>
+    <>
+      <div className='container'>
+        <div className="section-1">
+          <div className="table">
+            <Table />
+          </div>
+          <div className="card-container">
+            <div className="input-field">
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Country</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={country || ""}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Worldwide">Worldwide</MenuItem>
 
-      <div className="card-container">
-        <div className="input-field">
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Country</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={country || ""}
-              onChange={handleChange}
-            >
-              <MenuItem value="Worldwide">Worldwide</MenuItem>
+                  {countryList.map((val, idx) => (
+                    <MenuItem value={val.name}>{val.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
 
-              {countryList.map((val, idx) => (
-                <MenuItem value={val.name}>{val.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            <div className="card-content">
+              <div className="card3">
+                <Card
+                  title="Cases"
+                  count={value === 0 ? cases : countryCasesData}
+                  todayGlobalData={
+                    value === 0 ? newCasesData : countryTodayCasesData
+                  }
+                />
+              </div>
+              <div className="card2">
+                <Card
+                  title="Recovered"
+                  count={
+                    value === 0 ? worldRecoveredData : countryRecoveredData
+                  }
+                  todayGlobalData={
+                    value === 0
+                      ? globalTodayRecoveryData
+                      : countryTodayRecoveryData
+                  }
+                />
+              </div>
+
+              <div className="card3">
+                <Card
+                  title="Deaths"
+                  count={value === 0 ? worldDeathsData : countryDeathsData}
+                  todayGlobalData={
+                    value === 0 ? globalTodayDeathData : countryTodayDeathData
+                  }
+                />
+              </div>
+            </div>
+            <div className="graph-container">
+              <Graph
+                recovered={recoveredData}
+                death={deathsData}
+                worldCasesData={allData?.cases}
+                worldRecoveredData={allData?.recovered}
+                worldDeathsData={allData?.deaths}
+                input={country}
+              />
+            </div>
+          </div>
+          <div className="title">
+            <h1> Covid Tracker </h1>
+          </div>
         </div>
 
-        <div className="card-content">
-          <div className="card3">
-            <Card
-              title="Cases"
-              count={value === 0 ? cases : countryCasesData}
-              todayGlobalData={
-                value === 0 ? newCasesData : countryTodayCasesData
-              }
-            />
+        <div className="section-2">
+          <div className="table-desktop">
+            <Table />
           </div>
-          <div className="card2">
-            <Card
-              title="Recovered"
-              count={value === 0 ? worldRecoveredData : countryRecoveredData}
-              todayGlobalData={
-                value === 0 ? globalTodayRecoveryData : countryTodayRecoveryData
-              }
-            />
-          </div>
-
-          <div className="card3">
-            <Card
-              title="Deaths"
-              count={value === 0 ? worldDeathsData : countryDeathsData}
-              todayGlobalData={
-                value === 0 ? globalTodayDeathData : countryTodayDeathData
-              }
-            />
+          <div className="line-graph">
+            <Linegraph countryList={countryList} />
           </div>
         </div>
       </div>
-      <div className="title">
-        <h1> Covid Tracker </h1>
-      </div>
-    </div>
+    </>
   );
 };
 

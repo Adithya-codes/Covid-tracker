@@ -16,7 +16,7 @@ const Graph = ({ recovered, death,worldCasesData, worldRecoveredData,worldDeaths
 
   //     ))
 
-  console.log(worldRecoveredData);
+
 
 
   
@@ -39,7 +39,6 @@ const Graph = ({ recovered, death,worldCasesData, worldRecoveredData,worldDeaths
     />
   ) : 'Loading';
 
-  console.log(recovered, death);
 
   return <div className="graph">
 

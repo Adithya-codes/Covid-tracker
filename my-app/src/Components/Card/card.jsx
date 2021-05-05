@@ -9,22 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import CountUp from 'react-countup'
 
 export default function Cardoutline({ title, count, todayGlobalData }) {
-  
-const[number,setNumber] =useState(null)
- 
 
-
-
-
-
-useEffect(() => {
-setNumber(parseInt(count),10)
-}, [])
-
-console.log(typeof(number));
-
-
-console.log(number);
 
 
   const useStyles = makeStyles({

@@ -1,73 +1,74 @@
-import React, { useState, useEffect,forwardRef } from "react";
-import MaterialTable from 'material-table'
-import { TablePagination} from '@material-ui/core';
-import {MuiThemeProvider} from "@material-ui/core/styles";
-import { createMuiTheme } from '@material-ui/core/styles';
+import React, { useState, useEffect, forwardRef } from "react";
+import MaterialTable from "material-table";
+import { TablePagination } from "@material-ui/core";
+import { MuiThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 
-import Search from '@material-ui/icons/Search';
+import Search from "@material-ui/icons/Search";
 
-
-const tableIcons = { Search: forwardRef((props, ref) => <Search {...props} ref={ref} />)}
+const tableIcons = {
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+};
 
 const theme = createMuiTheme({
   palette: {
-primary:{
-main:'#000080'}
-
+    primary: {
+      main: "#000080",
+    },
   },
-
 });
 
 const Table = () => {
-  let url = `https://api.covid19india.org/data.json`;
+  let url = `https://disease.sh/v3/covid-19/countries`;
 
-  const [tableData,setTableData] = useState([]);
-
-  
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     const fetchStateData = async () => {
-      const stateArr = [];
+      const countryArr = [];
 
       const res = await fetch(url);
       const data = await res.json();
-      console.log(data.statewise);
+      console.log(data);
 
-      data.statewise.map((val, idx) => stateArr.push(({ stateName: val?.state, cases: val?.active.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") })));
-      console.log(stateArr.shift());
-      console.log(stateArr.pop());
-      console.log(stateArr);
+      data.map((val, idx) =>
+        countryArr.push({ country: val?.country, cases: val?.todayCases })
+      );
 
-      setTableData(stateArr)
+      const sortedData =(
+        countryArr
+          .map((el) => ({ cases: el.cases, country: el.country }))
+          .sort((a, b) => (a.cases > b.cases ? -1 : b.cases > a.cases ? 1 : 0))
+          .filter((value, index) => index < 5)
+      );
 
+      setTableData(sortedData);
     };
-  
+
     fetchStateData();
   }, [url]);
-  console.log(tableData);
-  const [columnData,setColumnData]= useState([{title:'State',field:'stateName'},{title:'Cases',field:'cases'}])
- 
 
+  const [columnData, setColumnData] = useState([
+    { title: "Country", field: "country" },
+    { title: "Cases", field: "cases" },
+  ]);
 
   return (
-    <div className='table-data'>
-      <MuiThemeProvider theme={theme}> 
-       <MaterialTable
-     title='Covid India'
-   
-     columns={columnData}
-     data={tableData}
-     tableIcons={tableIcons}
-     options={{ search:false,paging:false,sorting:true,  searchFieldStyle:{width:'12rem'}}}
-  
-
-   
-     
-     
-    />
-    </MuiThemeProvider>
-   
-  
+    <div className="table-data">
+      <MuiThemeProvider theme={theme}>
+        <MaterialTable
+          title="Live Cases"
+          columns={columnData}
+          data={tableData}
+          tableIcons={tableIcons}
+          options={{
+            search: false,
+            paging: false,
+            sorting: true,
+            
+          }}
+        />
+      </MuiThemeProvider>
     </div>
   );
 };

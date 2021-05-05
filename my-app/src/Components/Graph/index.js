@@ -1,4 +1,5 @@
 import Graph from './graph'
 
 
-export default Graph;
+
+export default Graph
