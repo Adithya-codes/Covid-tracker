@@ -144,6 +144,7 @@ const App = () => {
   return (
     <>
       <div className='container'>
+        <div className='sections-container'>
         <div className="section-1">
           <div className="table">
             <Table />
@@ -225,6 +226,16 @@ const App = () => {
             <Linegraph countryList={countryList} />
           </div>
         </div>
+        
+        </div>
+        <footer className='footer'>
+          <div className='footer-text'> 
+            <h1>covid-19</h1>  
+            <h5> Let's fight it together. </h5>
+            </div>
+          
+     
+        </footer>
       </div>
     </>
   );

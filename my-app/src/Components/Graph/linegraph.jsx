@@ -6,7 +6,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import {Line} from 'react-chartjs-2'
+import { Line } from "react-chartjs-2";
+
+import Card from "@material-ui/core/Card";
+
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -15,6 +22,17 @@ const useStyles = makeStyles((theme) => ({
     width: "20rem",
     textAlign: "center",
     marginLeft: "1rem",
+  },
+
+  card: {
+    minWidth: 50,
+    maxWidth: "100%",
+  
+    backgroundColor: "white",
+    boxShadow: '0 7px 30px -10px rgba(150,170,180,0.5)',
+
+    display: "flex",
+    justifyContent: "center",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -25,8 +43,10 @@ const useStyles = makeStyles((theme) => ({
 const Linegraph = ({ countryList }) => {
   const classes = useStyles();
   const [country, setCountry] = useState("India");
-  const [date,setDate]= useState([]);
-  const[caseCount,setCaseCount]=useState([])
+  const [date, setDate] = useState([]);
+  const [caseCount, setCaseCount] = useState([]);
+  const [recoveredCount,setRecoveredCount]= useState([]);
+  const[deathsCount,setDeathsCount]= useState([])
 
   const handleChange = (event) => {
     setCountry(event.target.value);
@@ -35,102 +55,125 @@ const Linegraph = ({ countryList }) => {
   const url = `https://disease.sh/v3/covid-19/historical?lastdays=7`;
 
   useEffect(() => {
-    const casesArr = [];
-    const recoveredArr = [];
-    const deathsArr = [];
+  
 
     const fetchData = async () => {
       const res = await fetch(url);
       const data = await res.json();
+      const dataArr = [];
 
       data.map((key, idx) =>
-        casesArr.push({ country: key.country, cases: key.timeline.cases })
+        dataArr.push({ country: key.country, cases: key.timeline.cases, recovered: key.timeline.recovered, deaths: key.timeline.deaths })
       );
-      data.map((key, idx) =>
-        recoveredArr.push({
-          country: key.country,
-          recovered: key.timeline.recovered,
-        })
-      );
-      data.map((key, idx) =>
-        deathsArr.push({ country: key.country, deaths: key.timeline.deaths })
-      );
+    
 
-      console.log(casesArr, deathsArr);
+      
       let selected = [];
-      const dataArr = []
+      console.log(dataArr);
+     
 
-      selected.push(casesArr.find((el) => el.country === country));
+      selected.push(dataArr.find((el) => el.country === country));
 
       console.log(selected);
 
-      const cases = (selected? selected.map((el) => el?.cases):[]);
+      const cases = selected ? selected.map((el) => el?.cases) : [];
+      const recovered = selected ? selected.map((el) => el?.recovered) : [];
+      const deaths = selected ? selected.map((el) => el?.deaths) : [];
 
-      console.log(cases);
 
-      cases.map((el)=>{
-           
-        var month = Object.keys(el)
+      console.log(cases,recovered,deaths);
 
-      for(var i=0;i<month.length;i++){
+      cases.map((el) => {
+        var month = Object.keys(el);
 
-        
-      var n= month[i][0]
+        for (var i = 0; i < month.length; i++) {
+          var n = month[i][0];
 
-      console.log(n);
-      }
+          console.log(n);
+        }
 
-      console.log(n);
+        console.log(n);
 
-      n=5
+        n = 5;
 
-      if(n===5)
-      {
-        var x = Object.values(el)
-        console.log(x);
-        
-      }
+        if (n === 5) {
+          var x = Object.values(el);
+          console.log(x);
+        }
+      });
+
+      const dates = cases ? Object.keys(cases[0]) : "";
+
+      const casesCount = cases ? Object.values(cases[0]) : "";
+
+      const recoveredCount = recovered ? Object.values(recovered[0]) : "";
+      const deathsCount = deaths ? Object.values(deaths[0]) : "";
+
       
-          
 
-        
-          
-        
 
-      })
-      
-
-      const dates = (cases? Object.keys(cases[0]):'');
-
-      const casesCount = (cases?Object.values(cases[0]):'');
-
-     
-
-      console.log(dates);
-
-      console.log(casesCount,dates);
-      setDate(dates)
-      setCaseCount(casesCount)
+      console.log(casesCount,deathsCount);
+      setDate(dates);
+      setCaseCount(casesCount);
+      setRecoveredCount(recoveredCount)
+      setDeathsCount(deathsCount)
     };
 
     fetchData();
   }, []);
 
-  console.log(caseCount);
-  console.log(date);
-
-  const caseslineChart = (
-
-    caseCount?<Line
-    data={{labels:date,
-    datasets:[{data:caseCount,label:'Infected',borderColor:'#e23028',fill:false,backgroundColor:'#e23028'}]}}
-    
-    />:null
-
-
-  )
-
  
+  const caseslineChart = caseCount ? (
+    <Line
+      data={{
+        labels: date,
+        datasets: [
+          {
+            data: caseCount,
+            label: "Infected",
+            borderColor: "blue",
+            fill: false,
+            backgroundColor: "blue",
+          },
+        ],
+      }}
+    />
+  ) : null;
+
+  const recoveredlineChart = recoveredCount ? (
+    <Line
+      data={{
+        labels: date,
+        datasets: [
+          {
+            data: recoveredCount,
+            label: "Recovered",
+            borderColor: "green",
+            fill: false,
+            backgroundColor:"green",
+          },
+        ],
+      }}
+    />
+  ) : null;
+
+  const deathslineChart = deathsCount ? (
+    <Line
+      data={{
+        labels: date,
+        datasets: [
+          {
+            data: deathsCount,
+            label: "Deaths",
+            borderColor: "#e23028",
+            fill: false,
+            backgroundColor: "#e23028",
+          },
+        ],
+      }}
+    />
+  ) : null;
+
   return (
     <div className="line-graph-container">
       <div className="input-field">
@@ -152,22 +195,49 @@ const Linegraph = ({ countryList }) => {
         </FormControl>
       </div>
       <div className="graph-data">
-
-        
-      <div className="cases-graph">
-
-        <h1> Infected</h1>
-
-        {caseslineChart}
-
-    
-      </div>
-      <div className="recovered-graph">
-        <h1> recovered graph</h1>
-      </div>
-      <div className="death-graph">
-        <h1> death graph</h1>
-      </div>
+        <div className="cases-graph">
+          <Card className={classes.card} variant="outlined">
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                {caseslineChart}
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="recovered-graph">
+        <div className="cases-graph">
+          <Card className={classes.card} variant="outlined">
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+        {recoveredlineChart}
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
+        </div>
+        <div className="death-graph">
+        <div className="cases-graph">
+          <Card className={classes.card} variant="outlined">
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+       {deathslineChart}
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
+        </div>
       </div>
     </div>
   );

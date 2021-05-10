@@ -19,7 +19,7 @@ export default function Cardoutline({ title, count, todayGlobalData }) {
       width: 100,
       height: 90,
       backgroundColor: "white",
-      boxShadow: "0 -2px 10px rgba(0, 0, 0, 1)",
+      boxShadow: '0 7px 30px -10px rgba(150,170,180,0.5)',
       borderBottom: "6px solid red",
       display:'flex',
       justifyContent:'center'
@@ -30,7 +30,7 @@ export default function Cardoutline({ title, count, todayGlobalData }) {
       width: 100,
       height: 90,
       backgroundColor: "white",
-      boxShadow: "0 -2px 10px rgba(0, 0, 0, 1)",
+      boxShadow: '0 7px 30px -10px rgba(150,170,180,0.5)',
       borderBottom: "6px solid green",
       display:'flex',
       justifyContent:'center'
@@ -42,7 +42,7 @@ export default function Cardoutline({ title, count, todayGlobalData }) {
       width: 100,
       height: 90,
       backgroundColor: "white",
-      boxShadow: "0 -2px 10px rgba(0, 0, 0, 1)",
+      boxShadow: '0 7px 30px -10px rgba(150,170,180,0.5)',
       borderBottom: "6px solid blue",
       display:'flex',
       justifyContent:'center'
