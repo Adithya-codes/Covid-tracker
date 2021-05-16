@@ -144,11 +144,16 @@ const App = () => {
   return (
     <>
       <div className='container'>
+      <div className ='desktop-title'>
+           <h1>Covid Tracker</h1>
+          </div>
         <div className='sections-container'>
+          
         <div className="section-1">
           <div className="table">
             <Table />
           </div>
+
           <div className="card-container">
             <div className="input-field">
               <FormControl className={classes.formControl}>

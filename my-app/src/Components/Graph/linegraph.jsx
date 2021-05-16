@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
   card: {
     minWidth: 50,
     maxWidth: "100%",
-  
+
     backgroundColor: "white",
-    boxShadow: '0 7px 30px -10px rgba(150,170,180,0.5)',
+    boxShadow: "0 7px 30px -10px rgba(150,170,180,0.5)",
 
     display: "flex",
     justifyContent: "center",
@@ -42,87 +42,90 @@ const useStyles = makeStyles((theme) => ({
 
 const Linegraph = ({ countryList }) => {
   const classes = useStyles();
-  const [country, setCountry] = useState("India");
+  const [country, setCountry] = useState('India');
   const [date, setDate] = useState([]);
   const [caseCount, setCaseCount] = useState([]);
-  const [recoveredCount,setRecoveredCount]= useState([]);
-  const[deathsCount,setDeathsCount]= useState([])
+  const [recoveredCount, setRecoveredCount] = useState([]);
+  const [deathsCount, setDeathsCount] = useState([]);
 
-  const handleChange = (event) => {
-    setCountry(event.target.value);
-  };
 
-  const url = `https://disease.sh/v3/covid-19/historical?lastdays=7`;
-
-  useEffect(() => {
+  
   
 
+  const handleChange =  async (e) => {
+
+    const inputCountry = await e.target.value
+    setCountry(inputCountry);
+    
+  }
+
+  console.log(country);
+
+  const url = `https://disease.sh/v3/covid-19/historical?lastdays=7`;
+  const worldUrl =  `https://disease.sh/v3/covid-19/historical/all?lastdays=7`
+
+  useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(url);
       const data = await res.json();
       const dataArr = [];
 
-      data.map((key, idx) =>
-        dataArr.push({ country: key.country, cases: key.timeline.cases, recovered: key.timeline.recovered, deaths: key.timeline.deaths })
-      );
-    
+      const result = await fetch(worldUrl)
+      const worldData = await result.json();
+      console.log(worldData);
 
-      
+      data.map((key, idx) =>
+        dataArr.push({
+          country: key.country,
+          cases: key.timeline.cases,
+          recovered: key.timeline.recovered,
+          deaths: key.timeline.deaths,
+        })
+      );
+
       let selected = [];
       console.log(dataArr);
-     
+      console.log(country);
 
-      selected.push(dataArr.find((el) => el.country === country));
+      selected.push(dataArr?.find((el)=>el.country === country));
 
       console.log(selected);
+      console.log(selected[0]?.country);
 
-      const cases = selected ? selected.map((el) => el?.cases) : [];
+      const cases = selected?selected.map((el) => el?.cases):[];
       const recovered = selected ? selected.map((el) => el?.recovered) : [];
       const deaths = selected ? selected.map((el) => el?.deaths) : [];
 
+      console.log(cases, recovered, deaths);
 
-      console.log(cases,recovered,deaths);
+     
+      const dates = selected?Object.keys(cases[0]):''
 
-      cases.map((el) => {
-        var month = Object.keys(el);
-
-        for (var i = 0; i < month.length; i++) {
-          var n = month[i][0];
-
-          console.log(n);
-        }
-
-        console.log(n);
-
-        n = 5;
-
-        if (n === 5) {
-          var x = Object.values(el);
-          console.log(x);
-        }
-      });
-
-      const dates = cases ? Object.keys(cases[0]) : "";
-
-      const casesCount = cases ? Object.values(cases[0]) : "";
-
-      const recoveredCount = recovered ? Object.values(recovered[0]) : "";
-      const deathsCount = deaths ? Object.values(deaths[0]) : "";
-
-      
+      const casesCount = selected?Object.values(cases[0]):''
 
 
-      console.log(casesCount,deathsCount);
+
+      const recoveredCount = selected?Object.values(recovered[0]):''
+
+
+      const deathsCount = selected?Object.values(deaths[0]):''
+
+
+
+      console.log(casesCount, deathsCount);
       setDate(dates);
       setCaseCount(casesCount);
-      setRecoveredCount(recoveredCount)
-      setDeathsCount(deathsCount)
+      setRecoveredCount(recoveredCount);
+      setDeathsCount(deathsCount);
+
+
+  
+
     };
-
+//
     fetchData();
-  }, []);
+  }, [country]);
 
- 
   const caseslineChart = caseCount ? (
     <Line
       data={{
@@ -150,7 +153,7 @@ const Linegraph = ({ countryList }) => {
             label: "Recovered",
             borderColor: "green",
             fill: false,
-            backgroundColor:"green",
+            backgroundColor: "green",
           },
         ],
       }}
@@ -176,7 +179,7 @@ const Linegraph = ({ countryList }) => {
 
   return (
     <div className="line-graph-container">
-      <div className="input-field">
+      <div className="input-field line-graph-input">
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">
             Country
@@ -184,13 +187,16 @@ const Linegraph = ({ countryList }) => {
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
-            value={country}
+            value={country||''}
+            defaultValue=''
+            
             onChange={handleChange}
             label="Country"
           >
+           <MenuItem value="Worldwide">Worldwide</MenuItem> 
             {countryList.map((val, idx) => (
               <MenuItem value={val.name}>{val.name}</MenuItem>
-            ))}
+            ))} 
           </Select>
         </FormControl>
       </div>
@@ -208,8 +214,8 @@ const Linegraph = ({ countryList }) => {
             </CardContent>
           </Card>
         </div>
+
         <div className="recovered-graph">
-        <div className="cases-graph">
           <Card className={classes.card} variant="outlined">
             <CardContent>
               <Typography
@@ -217,14 +223,13 @@ const Linegraph = ({ countryList }) => {
                 color="textSecondary"
                 gutterBottom
               >
-        {recoveredlineChart}
+                {recoveredlineChart}
               </Typography>
             </CardContent>
           </Card>
         </div>
-        </div>
+
         <div className="death-graph">
-        <div className="cases-graph">
           <Card className={classes.card} variant="outlined">
             <CardContent>
               <Typography
@@ -232,11 +237,10 @@ const Linegraph = ({ countryList }) => {
                 color="textSecondary"
                 gutterBottom
               >
-       {deathslineChart}
+                {deathslineChart}
               </Typography>
             </CardContent>
           </Card>
-        </div>
         </div>
       </div>
     </div>

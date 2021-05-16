@@ -139,6 +139,9 @@
     
   }
 
+
+ 
+
   .section-2
   {
   flex-direction: column;
@@ -209,7 +212,7 @@
   {
     flex-direction: column;
     justify-content: center;
-    margin: 0,auto;
+    margin-top: 3rem;
     
   }
 
@@ -257,6 +260,17 @@
     font-size: 1rem;
     color: #6c757d;
 
+  }
+
+  .line-graph-input
+  {
+      text-align: center;
+      width: 100%;
+  }
+
+  .desktop-title
+  {
+    display: none;
   }
 
  
@@ -330,11 +344,102 @@
     justify-content: space-between;
     width:100%
   }
+
+  .line-graph-input
+  {
+    text-align: left;
+  }
+
+
+
+
+  .desktop-title
+
+  {
+    text-align: center;
+    display: block;
+  }
+
+  .desktop-title h1
+  {
+    color: #007bff;
+    font-size: 2.7rem;
+  }
   
 
 
   
   
+  
+}
+
+
+@media (min-width:1200px) {
+
+
+  .section-2
+  {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .table-desktop
+  {
+    display: block;
+  }
+
+  .table-data
+  {
+    width: 20rem;
+    margin-top: 3rem;
+  }
+
+  .line-graph-container
+  {
+    width: 100%;
+  
+    display: block;
+  }
+
+  .graph-data{
+
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+    width: 100%;
+    row-gap: 1rem;
+    column-gap: 1rem;
+   margin-top: 2rem;
+   height: auto;
+   justify-content: space-between;
+  }
+
+  .cases-graph{
+
+    width: 100%;
+  }
+
+  .death-graph
+  {
+     width: 100%;
+    
+  }
+
+  .footer
+  {
+    margin-top: 4rem;
+    
+  }
+
+  .footer h1
+  {
+    font-size: 2.2rem;
+    margin-bottom: -3rem;
+  }
+
+  .footer h5
+  {
+    font-size: 2rem;
+  }
   
 }
 
