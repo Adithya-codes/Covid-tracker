@@ -386,6 +386,7 @@
   .table-desktop
   {
     display:block;
+    margin-top: 5rem;
   }
 
   .table-data

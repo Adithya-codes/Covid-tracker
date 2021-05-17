@@ -57,7 +57,7 @@ const Table = () => {
     <div className="table-data">
       <MuiThemeProvider theme={theme}>
         <MaterialTable
-          title="Live Cases"
+          title="Top Live Cases"
           columns={columnData}
           data={tableData}
           tableIcons={tableIcons}
