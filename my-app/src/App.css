@@ -385,7 +385,7 @@
 
   .table-desktop
   {
-    display: block;
+    display:block;
   }
 
   .table-data
@@ -398,7 +398,7 @@
   {
     width: 100%;
   
-    display: block;
+    display:block;
   }
 
   .graph-data{
